@@ -1,8 +1,11 @@
 package com.starylwu.bitmap;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -36,18 +39,26 @@ public class BitMapAlgorithm {
 //        System.out.println("Error count: " + error + ", error rate = " + String.format("%f", (float)error/(float)sizeOfNumberSet));
 //    }
 
-    public static void main(String[] args) {
-        BitSet bitSet = new BitSet(1000);
-        BitSet bitSet2 = new BitSet(1000);
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        BitSet bitSet = new BitSet(10000000);
+        BitSet bitSet2 = new BitSet(10000000);
+        bitSet2.nextSetBit(0);
         bitSet.set(1);
-        bitSet.set(1000);
-        bitSet.or(bitSet2);
-        long[] bytes = bitSet.toLongArray();
+        bitSet.set(2);
+        bitSet.set(10000000);
+        bitSet.xor(bitSet2);
+        byte[] bytes = bitSet.toByteArray();
+        String s = new String(bytes);
         List<Long> list = new ArrayList<>();
         for (long b : bytes){
             list.add(b);
         }
-        System.out.println(bitSet.get(1000));
-        System.out.println(list);
+        System.out.println(s);
+
+        BitSet bitSet3 = BitSet.valueOf(s.getBytes());
+        System.out.println(bitSet3.get(1));
+        System.out.println(bitSet3.get(2));
+        System.out.println(bitSet3.get(10000000));
+//        System.out.println(list);
     }
 }
